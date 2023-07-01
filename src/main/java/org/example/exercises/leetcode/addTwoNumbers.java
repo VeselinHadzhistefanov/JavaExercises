@@ -36,41 +36,52 @@ public class addTwoNumbers {
 
     public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
 
-        int num1 = 0;
-        int num2 = 0;
+        int remainder = 0;
 
+        ListNode head = new ListNode();
+        ListNode prev = null;
+        while (l1 != null || l2 != null) {
+            int num1 = 0;
+            if (l1 != null)
+                num1 = l1.val;
 
+            int num2 = 0;
+            if (l2 != null)
+                num2 = l2.val;
 
-        int pow = 1;
-        while (l1 != null) {
-            num1 += pow * l1.val;
-            pow *= 10;
-            l1 = l1.next;
+            int sum = num1 + num2 + remainder;
+
+            if (sum >= 10) {
+                remainder = 1;
+                sum = sum - 10;
+            } else {
+                remainder = 0;
+            }
+
+            head = new ListNode(sum, prev);
+            prev = head;
+
+            if (l1 != null)
+                l1 = l1.next;
+
+            if (l2 != null)
+                l2 = l2.next;
         }
 
-        pow = 1;
-        while (l2 != null) {
-            num2 += pow * l2.val;
-            pow *= 10;
-            l2 = l2.next;
+        if (remainder == 1) {
+            head = new ListNode(1, prev);
         }
 
-        int sum = num1 + num2;
-        ListNode listNode;
-
-        int remainder = (sum / 10) * 10;
-        listNode = new ListNode(sum - remainder);
-        sum = sum / 10;
-        ListNode result = listNode;
-
-        while (sum != 0) {
-            remainder = (sum / 10) * 10;
-            ListNode listNode1 = new ListNode(sum - remainder);
-            listNode.next = listNode1;
-            sum = sum / 10;
-            listNode = listNode1;
+        ListNode previous = null;
+        ListNode current = head;
+        ListNode next;
+        while (current != null) {
+            next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
         }
 
-        return result;
+        return previous;
     }
 }
